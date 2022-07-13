@@ -1,0 +1,19 @@
+{
+    "name": "sashapc/code",
+    "authors": [
+        {
+            "name": "porcelanosa",
+            "email": "public_mce@rambler.ru"
+        }
+    ],
+    "require": {
+        "symfony/dotenv": "^6.0",
+        "ext-pdo": "*"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-latest"
+    },
+    "autoload": {
+        "classmap": ["Config.php"]
+    }
+}
