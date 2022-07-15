@@ -22,13 +22,13 @@ try {
     $conn = new PDO("mysql:host=$servername;dbname=$db", $username, $password);
     // set the PDO error mode to exception
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo 'Connected successfully';
+    echo 'Connected successfully MySql';
     $conn = null;
 } catch (PDOException $e) {
     echo 'Connection failed: ' . $e->getMessage();
 }
 
-echo "\t\nPGSQL\t\n";
+/*echo "\t\nPGSQL\t\n";
 $pg_servername = 'host.docker.internal';
 $pg_db         = $_ENV['PGSQL_DATABASE'];
 $pg_username   = $_ENV['PGSQL_DB_USERNAME'];
@@ -50,7 +50,7 @@ try {
     if ($pdo) {
         $pdo = null;
     }
-}
+}*/
 /*function print_reverse($string) {
     if ($string) {
         return print_reverse(substr($string,1)).substr(0,1);
