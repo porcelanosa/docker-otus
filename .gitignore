@@ -1,4 +1,5 @@
 /code/vendor/
 .idea/**/*
 .vscode/**/*
-dbdata/
+/dbdata/
+dbdata/**/*
