@@ -4,3 +4,5 @@
 /dbdata/
 dbdata/**/*
 /dbdata/**/*
+/code/.env
+!/dbdata/.gitignore

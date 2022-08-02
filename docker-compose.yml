@@ -7,17 +7,32 @@ services:
   app:
     # Если нет секции build, то система будет искать образ в репозиториях
     build:
+      args:
+        uname: ${PHP_UNAME}
+        uid: ${PHP_UID}
+        gid: ${PHP_GID}
       context: ./fpm
       dockerfile: Dockerfile
     image: app/php # имя будущего образа
     container_name: app # имя контейнера после запуска
+    ports:
+      - "9003:9003"
     volumes:
        - ./code:/data/mysite.local
+       - ./.env:/data/mysite.local/.env
+       - ./fpm/php.ini:/usr/local/etc/php/conf.d/php.ini
     environment:
-      PHP_IDE_CONFIG: "serverName=Docker"
+      COMPOSER_MEMORY_LIMIT: 2G
+      XDEBUG_CONFIG: client_host=${XDEBUG_REMOTE_HOST} client_port=${XDEBUG_STORM_PORT} remote_enable=1
+      PHP_IDE_CONFIG: serverName=${XDEBUG_STORM_SERVER_NAME}
+    expose:
+      - 9000
+      - 9003
     # мы можем создать для контейнеров внутреннюю сеть
     networks:
       - app-network
+    depends_on:
+      - db
 
   #контейне с Nginx
   webserver:
@@ -34,18 +49,27 @@ services:
        - ./code:/data/mysite.local
     networks:
       - app-network
+    depends_on:
+      - app
 
   # контейнер с MySQL
   # строим на базе стандартного образа
   db:
-    image: mysql:5.7.22
+    image: mariadb
     container_name: db
+    restart: always
     ports:
       - "3306:3306"
     # описываем, какую БД мы создаём
     environment:
+      MARIADB_USER: ${MYSQL_USER}
+      MARIADB_PASSWORD: ${MYSQL_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+#      MARIADB_RANDOM_ROOT_PASSWORD: 'yes'
       MYSQL_DATABASE: ${MYSQL_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+#      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+#      MYSQL_USER: ${MYSQL_USER}
+#      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
       - ./dbdata:/var/lib/mysql
     networks:
@@ -55,3 +79,7 @@ services:
 networks:
   app-network:
     driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: ${SUBNET_IP}/${SUBNET_MASK}

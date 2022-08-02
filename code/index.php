@@ -12,7 +12,7 @@ new Config(__DIR__ . '/.env');
 echo "OK, Otus!";
 
 //var_dump($_ENV);
-//phpinfo();
+phpinfo();
 $servername = 'db';
 $username   = 'root';
 $password   = $_ENV['MYSQL_ROOT_PASSWORD'];

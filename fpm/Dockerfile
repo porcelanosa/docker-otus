@@ -23,8 +23,18 @@ RUN pecl channel-update pecl.php.net && \
 # Устанавливаем Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+# Create system user to run Composer and Artisan Commands
+#RUN groupadd --gid $gid $uname --non-unique \
+#  && useradd --uid $uid --gid $gid $uname -G www-data,root -s /bin/bash
+#
+#RUN mkdir -p /home/$uname/.composer && \
+#    chown -R $uname:$uname /home/$uname
+
 WORKDIR /data
 
 VOLUME /data
+
+EXPOSE 9000
+EXPOSE 9003
 
 CMD ["php-fpm"]
