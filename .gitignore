@@ -1,8 +1,8 @@
 /code/vendor/
 .idea/**/*
 .vscode/**/*
-/dbdata/
-dbdata/**/*
-/dbdata/**/*
 /code/.env
+/dbdata/**/*
 !/dbdata/.gitignore
+/dbdata/pgdata/
+/dbdata/mysqldata/

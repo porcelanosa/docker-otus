@@ -15,8 +15,8 @@ services:
       dockerfile: Dockerfile
     image: app/php # имя будущего образа
     container_name: app # имя контейнера после запуска
-    ports:
-      - "9003:9003"
+#    ports:
+#      - "9003:9003"
     volumes:
        - ./code:/data/mysite.local
        - ./.env:/data/mysite.local/.env
@@ -33,6 +33,7 @@ services:
       - app-network
     depends_on:
       - db
+      - pg
 
   #контейне с Nginx
   webserver:
@@ -71,7 +72,25 @@ services:
 #      MYSQL_USER: ${MYSQL_USER}
 #      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     volumes:
-      - ./dbdata:/var/lib/mysql
+      - ./dbdata/mysqldata:/var/lib/mysql
+    networks:
+      - app-network
+
+  # контейнер с PostgresQL
+  pg:
+    image: postgres:14.4-alpine
+    container_name: pg_db
+    restart: always
+    ports:
+      - "15432:5432"
+    # описываем, какую БД мы создаём
+    environment:
+      POSTGRES_USER: ${PGSQL_DB_USERNAME}
+      POSTGRES_PASSWORD: ${PGSQL_DB_PASSWORD}
+      POSTGRES_DB: ${PGSQL_DATABASE}
+      PGDATA: /dbdata/postgres
+    volumes:
+      - ./dbdata/pgdata:/data/postgres
     networks:
       - app-network
 
